@@ -198,3 +198,28 @@ void GenerateMIDIEventsAudioProcessor::setNoteNumber(int noteNumber)
     message.setTimeStamp(juce::Time::getMillisecondCounterHiRes() * .001 - m_startTime);
     addMessageToList(message);
 }
+
+void GenerateMIDIEventsAudioProcessor::addMessageToList(const juce::MidiMessage& message)
+{
+    auto time{ message.getTimeStamp() };
+
+    int hours{ static_cast<int>(time / 3600.0) % 24 };
+    int minutes{ static_cast<int>(time / 60.0) % 60 };
+    int seconds{ static_cast<int>(time) % 60 };
+    int millis{ static_cast<int>(time * 1000.0) % 1000 };
+    
+    juce::String timeCode{ juce::String::formatted("%02d:%02d:%02d:%03d",
+                                                   hours, minutes, seconds, millis) };
+
+    logMessage(timeCode + " - " + getMidiMessageDescription(message));
+}
+
+juce::String GenerateMIDIEventsAudioProcessor::getMidiMessageDescription(const juce::MidiMessage& message)
+{
+    return message.getTextFromTextMetaEvent();
+}
+
+void GenerateMIDIEventsAudioProcessor::logMessage(const juce::String& message)
+{
+
+}

@@ -61,6 +61,9 @@ private:
     const double m_startTime;
 
     void setNoteNumber(int noteNumber);
+    void addMessageToList(const juce::MidiMessage& message);
+    juce::String getMidiMessageDescription(const juce::MidiMessage& message);
+    void logMessage(const juce::String& message);
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerateMIDIEventsAudioProcessor)
