@@ -12,7 +12,8 @@
 //==============================================================================
 GenerateMIDIEventsAudioProcessor::GenerateMIDIEventsAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     : m_midiChannel(10), m_startTime(juce::Time::getMillisecondCounterHiRes()),
+       AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
@@ -22,6 +23,7 @@ GenerateMIDIEventsAudioProcessor::GenerateMIDIEventsAudioProcessor()
                        )
 #endif
 {
+
 }
 
 GenerateMIDIEventsAudioProcessor::~GenerateMIDIEventsAudioProcessor()
@@ -188,4 +190,11 @@ void GenerateMIDIEventsAudioProcessor::setStateInformation (const void* data, in
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new GenerateMIDIEventsAudioProcessor();
+}
+
+void GenerateMIDIEventsAudioProcessor::setNoteNumber(int noteNumber)
+{
+    auto message{juce::MidiMessage::noteOn(m_midiChannel, noteNumber, (juce::uint8) 100)};
+    message.setTimeStamp(juce::Time::getMillisecondCounterHiRes() * .001 - m_startTime);
+    addMessageToList(message);
 }

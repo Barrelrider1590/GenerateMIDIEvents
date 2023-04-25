@@ -57,6 +57,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    const int m_midiChannel;
+    const double m_startTime;
+
+    void setNoteNumber(int noteNumber);
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerateMIDIEventsAudioProcessor)
 };
